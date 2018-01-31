@@ -25,7 +25,7 @@ count = [0,0,0,0,0,0]
 def assign(n, plens):
     # n is the plenaries available for the timeslot, plens is the preferences they chose
     # this just does one-time assignment: assigns a random plen, and checks if it's possible within that timeslot
-    # if none of them are available (which is only a problem if one of the sessions doesn't run twice), then they get a random one (sorry)
+    # if none of them are available (which is only a problem if one of the sessions doesn't run twice), then they get a random one (sorry), which uses "FalseFalse" as a flag so I don't double assign plenaries
     og = len(n) # placeholder as a "just in case"
     for i in range(len(plens)):
         if (len(n) != 0):
@@ -35,7 +35,10 @@ def assign(n, plens):
             else:
                 n.pop(number)
         else:
-            return random.randrange(0,og)
+            checker = random.randrange(0,og)
+            while (plens[checker] == "FalseFalse"):
+                checker = random.randrange(0,og)
+            return checker
 
 # This just imports the CSV and does some counting on plenary information.
 with open('students.csv', 'rb') as csvfile:
@@ -62,19 +65,19 @@ with open('output-students.csv', 'wb') as csvfile:
         temp = assign([0,2,3,5],row[2])
         count[temp] += 1
         final.append(plen[temp])
-        row[2][temp] = "False"
+        row[2][temp] = "FalseFalse" # this is a flag so plenaries don't get double assigned. bad, I know.
 
         # 2nd Session
         temp = assign([0,1,2,4],row[2])
         count[temp] += 1
         final.append(plen[temp])
-        row[2][temp] = "False"
+        row[2][temp] = "FalseFalse"
 
         # 3rd Session
         temp = assign([3,4,5],row[2])
         count[temp] += 1
         final.append(plen[temp])
-        row[2][temp] = "False"
+        row[2][temp] = "FalseFalse"
         print final
         writer.writerow(final)
 print "Plenary prefrences: "
