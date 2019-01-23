@@ -78,9 +78,9 @@ with open('output-students.csv', 'wb') as csvfile:
         count[temp] += 1
         final.append(plen[temp])
         row[2][temp] = "FalseFalse"
-        print(final)
+        print final
         writer.writerow(final)
-print("Plenary prefrences: ")
-print(pick)
-print("Plenary assignments: ")
-print(count)
+print "Plenary prefrences: "
+print pick
+print "Plenary assignments: "
+print count

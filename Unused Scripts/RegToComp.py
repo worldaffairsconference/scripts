@@ -1,6 +1,6 @@
 #Light script to change the Google Spreadsheet Registration into a Compressed CSV with formatting cleaned up
 import CsvParsing as cp
-lst = cp.readCSVSpecial("2019Reg")
+lst = cp.readCSVSpecial("WAC Plenaries 2019: UCC")
 _lst = [["Username", "EU", "Data", "Reconciliation", "Startup", "Rights", "Defiance", "Dietary Restrictions"]]
 print(_lst[0])
 

@@ -1,2 +1,8 @@
 *.csv
 *.json
+*.xml
+.idea/scripts.iml
+.idea/vcs.xml
+.idea/vcs.xml
+.DS_Store
+Unused Scripts/.DS_Store
