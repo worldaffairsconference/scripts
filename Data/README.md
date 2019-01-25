@@ -1,0 +1,2 @@
+# Note
+If you are wanting to run any of the scripts as a collaborator in the WAC registration team you must have the 2 data sources that are not included in the repository and put them inside this folder. For further instructions check the main `README.md` file in the directory.
