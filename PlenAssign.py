@@ -14,12 +14,12 @@ plen = ["Data Daycare", "Popular Defiance", "Reconciliation and Indigenization",
 """ Ideal Locations
 Place (capacity) - Ideal Plenary
 
-Laidlaw (500ish) - Startup Cleanup
-Gym (100ish) - The EU’s Midlife Crisis
-Theater (80ish) - Data Daycare
-Library (80ish) - Popular Defiance
-RM 123 (60ish) - The Plight of Workers’ Rights
-RM 138 (60ish) - Reconciliation and Indigenization
+Laidlaw (650) - Startup Cleanup
+Gym (100) - The EU’s Midlife Crisis
+Theater (100) - Data Daycare
+Library (80) - Popular Defiance
+RM 123 (75) - The Plight of Workers’ Rights
+RM 138 (75) - Reconciliation and Indigenization
 """
 
 data = []
@@ -29,41 +29,41 @@ count = [0,0,0,0,0,0]
 countSemi = [[0,-1,0,-1,0,0],[-1,0,0,0,0,-1],[0,0,-1,0,-1,0]]
 
 #Room capacities
-rmLaidlaw = 500 #500
+rmLaidlaw = 650 #650
 rmGym = 100 #100
-rmTheater = 80 #80
+rmLecture = 100 #100
 rmLibrary = 80 #80
-rm123 = 60 #60
-rm138 = 60 #60
-#      80         80         60       500        100    60
-#      Data       Defiance   Reconcil Startup    EU     Rights
-cap = [rmTheater, rmLibrary, rm138,   rmLaidlaw, rmGym, rm123] #Never should change this
-
-broken = 0
+rm124 = 75 #75
+rm138 = 75 #75
+#Data, Defiance, Reconcil, Startup, EU, Rights
+newCap = [[rmLecture, -1, rm138, -1, rmLaidlaw, rmLecture], [-1, rmLecture, rm138, rmLaidlaw, rmGym, -1], [rmLecture, rmLaidlaw, -1, rm138, -1, rmGym]]
 
 def assign(n, plens, id):
     #n is the plenaries in the given timeslot
     #plens is the plens that they want to join
     #id is the plen number
-    #Randomly assigns plenaries hopefully within their chosen (if they are full or none are available if one did not run twice they get a random plenary)
-    og = len(n) #Max number of plenaries in the start
+    #randomly assigns plenaries hopefully within their chosen (if they are full or none are available if one did not run twice they get a random plenary)
+    og = len(n)#max number of plenaries in the start
     _n = n.copy()
     for i in range(len(plens)):
         if len(n) != 0:
             number = random.randrange(0, len(n))
-            if plens[n[number]] == "True" and countSemi[id][n[number]] < cap[n[number]]:
+            if plens[n[number]] == "True" and countSemi[id][n[number]] < newCap[id][n[number]]:
                 return n[number]
             else:
                 n.pop(number)
         else:
-            checker = random.randrange(0, og)
-            while plens[_n[checker]] == "FalseFalse" or countSemi[id][_n[checker]] >= cap[_n[checker]]:
-                    #global broken
-                    #broken += 1
-                checker = random.randrange(0, og)
-            return _n[checker]
+            checker = list(range(0, og))
+            random.shuffle(checker)
+            try:
+                while plens[_n[checker[0]]] == "FalseFalse" or countSemi[id][_n[checker[0]]] >= newCap[id][_n[checker[0]]]:
+                    checker.pop(0)
+            except:
+                print("Not enough spaces. Uh oh")
+                exit(1)
+            return _n[checker[0]]
 
-#Read CSV and count of choices and format list
+#read CSV and count of choices and format list
 with open("Data/students.csv", "r") as csvfile:
     csvreader = csv.reader(csvfile)
     for row in csvreader:
@@ -78,36 +78,32 @@ with open("Data/plenaryAssign.csv", "w") as csvfile:
     for row in data: # this is the loop that handles each student
         final = [row[0]]
 
-        # this next bit can be confusing, since it's not coded well
-        # for each session, we use the assign() function to assign a random plenary to the delegate
-        # temp is the index in plen[] that corresponds to each plenary
-        # then, we upp the counter, add it to the "write" array, and set that plenary preference to false - which is a hack solution, but it's the best way to handle duplicates without rewriting everything (which it should)
+        #basically we run the assign function and store in in temp so we know which plenary they will attend for the timeslot
+        #afterwards we change a couple of counts and get the output structured
+        #we run it 3 times as we have 3 sessions
+
+        #True - Want to go
+        #False - Don't want to go (but who cares)
+        #FalseFalse - Already have gone
 
         plenChoices = row[2]
         print(row[0])
 
-        # 1st Session
-        #print(row[0])
-        #print("Assign 1")
+        #1st Session
         temp = assign([0, 2, 4, 5], plenChoices, 0)
         count[temp] += 1
         countSemi[0][temp] += 1
         final.append(plen[temp])
         row[2][temp] = "FalseFalse"
-        #True - Want to go
-        #False - Don't want to go
-        #FalseFalse - Already have gone
 
-        # 2nd Session
-        #print("Assign 2")
+        #2nd Session
         temp = assign([1, 2, 3, 4], plenChoices, 1)
         count[temp] += 1
         countSemi[1][temp] += 1
         final.append(plen[temp])
         row[2][temp] = "FalseFalse"
 
-        # 3rd Session
-        #print("Assign 3")
+        #3rd Session
         temp = assign([0, 1, 3, 5], plenChoices, 2)
         count[temp] += 1
         countSemi[2][temp] += 1
@@ -122,5 +118,4 @@ print("Plenary prefrences: ")
 print(pick)
 print("Plenary assignments: ")
 print(count)
-print(broken)
 print(countSemi)
