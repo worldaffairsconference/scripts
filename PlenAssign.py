@@ -1,3 +1,11 @@
+"""
+Plenary preferences:
+[301, 301, 102, 318, 323, 247]
+Plenary assignments:
+[230, 200, 114, 200, 264, 186]
+[[100, -1, 39, -1, 161, 98], [-1, 100, 75, 120, 103, -1], [130, 100, -1, 80, -1, 88]]
+"""
+
 import random
 import csv
 
@@ -30,13 +38,13 @@ countSemi = [[0,-1,0,-1,0,0],[-1,0,0,0,0,-1],[0,0,-1,0,-1,0]]
 
 #Room capacities
 rmLaidlaw = 650 #650
-rmGym = 100 #100
+rmGym = 120 #120
 rmLecture = 100 #100
 rmLibrary = 80 #80
 rm124 = 75 #75
 rm138 = 75 #75
 #Data, Defiance, Reconcil, Startup, EU, Rights
-newCap = [[rmLecture, -1, rm138, -1, rmLaidlaw, rmLecture], [-1, rmLecture, rm138, rmLaidlaw, rmGym, -1], [rmLecture, rmLaidlaw, -1, rm138, -1, rmGym]]
+newCap = [[rmLecture, -1, rmLibrary, -1, rmLaidlaw, rmGym], [-1, rmLecture, rmLibrary, rmGym, rmLaidlaw, -1], [rmLaidlaw, rmLecture, -1, rmLibrary, -1, rmGym]]
 
 def assign(n, plens, id):
     #n is the plenaries in the given timeslot
@@ -114,7 +122,7 @@ with open("Data/plenaryAssign.csv", "w") as csvfile:
         print(count)
         print(countSemi)
         writer.writerow(final)
-print("Plenary prefrences: ")
+print("Plenary preferences: ")
 print(pick)
 print("Plenary assignments: ")
 print(count)
