@@ -32,6 +32,8 @@ for (let i = 0; i < teachersKeys.length; i++) {
       name: student.name,
       email: student.email,
       school: teacher.school,
+      teachername: teacher.name,
+      teacheremail: teacher.email,
       grade: student.grade,
       uid: studentKeys[j],
       plen1: student.p1 || "Not selected",
@@ -48,7 +50,6 @@ console.log(
 
 // Get lunch status for each student
 for (let i = 0; i < students.length; i++) {
-  console.log(data.lunch[students[i].uid]);
   if (data.lunch[students[i].uid] && data.lunch[students[i].uid].name) {
     students[i].lunch = true;
     students[i].uccid = data.lunch[students[i].uid].uccid;
@@ -72,11 +73,11 @@ for (let i = 0; i < students.length; i++) {
 
 // Write name, lunch status, ucc id to per-school CSV
 for (let school in schools) {
-  fs.writeFileSync("./" + school + ".csv", "name,lunch,uccid\n");
+  fs.writeFileSync("./" + school + ".csv", "name,lunch,uccid,teachername,teacheremail\n");
   for (let i = 0; i < schools[school].length; i++) {
     fs.appendFileSync(
       "./" + school + ".csv",
-      `${schools[school][i].name},${schools[school][i].lunch},${schools[school][i].uccid}\n`
+      `${schools[school][i].name},${schools[school][i].lunch},${schools[school][i].uccid},${schools[school][i].teachername},${schools[school][i].teacheremail},\n`
     );
   }
 }
